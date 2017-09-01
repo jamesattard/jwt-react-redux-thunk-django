@@ -1,5 +1,6 @@
+import axios from 'axios';
 import * as types from './actionTypes';  
-import sessionApi from '../api/SessionApi';
+import sessionApi from '../api/sessionApi';
 
 export function loginSuccess() {  
   return {type: types.LOG_IN_SUCCESS}
@@ -7,11 +8,21 @@ export function loginSuccess() {
 
 export function logInUser(credentials) {  
   return function(dispatch) {
-    return sessionApi.login(credentials).then(response => {
-      sessionStorage.setItem('jwt', response.jwt);
+
+    axios.post('http://localhost:7777/auth/', {
+      username: credentials.username,
+      password: credentials.password
+    })
+    .then(function (response) {
+      console.log("Response: ", response);
+      console.log("Token: ", response.data.token)
+      sessionStorage.setItem('jwt', response.data.token);
       dispatch(loginSuccess());
-    }).catch(error => {
+    })
+    .catch(function (error) {
+      console.log(error);
       throw(error);
     });
+
   };
 }
