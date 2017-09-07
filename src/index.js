@@ -24,13 +24,27 @@ const AuthRoute = ({ component: Component, ...rest }) => (
   )}/>
 )
 
+const LoginRoute = ({ component: Component, ...rest }) => (  
+  <Route {...rest} render={props => (
+    sessionStorage.getItem('jwt') ? (
+      <Redirect to={{
+        pathname: '/',
+        state: { from: props.location }
+      }}/>
+    ) : (
+      <Component {...props}/>
+    )
+  )}/>
+)
+
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
         <div>
           <Switch>
             <AuthRoute exact path="/" component={App}  />
-            <Route path="/login" component={LoginPage} />
+            <LoginRoute path="/login" component={LoginPage} />
+            <Redirect to="/" />
           </Switch>
         </div>
     </BrowserRouter>
