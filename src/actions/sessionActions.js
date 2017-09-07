@@ -5,7 +5,7 @@ export function loginSuccess() {
   return {type: types.LOG_IN_SUCCESS}
 }
 
-export function logInUser(credentials) {  
+export function logInUser(credentials, callback) {  
   return function(dispatch) {
 
     axios.post('http://localhost:7777/auth/', {
@@ -13,15 +13,14 @@ export function logInUser(credentials) {
       password: credentials.password
     })
     .then(function (response) {
-      console.log("Response: ", response);
-      console.log("Token: ", response.data.token)
       sessionStorage.setItem('jwt', response.data.token);
       dispatch(loginSuccess());
     })
+    .then(() => callback())
     .catch(function (error) {
-      console.log(error);
-      throw(error);
-    });
-
+      callback();
+      // throw(error);
+      // dispatch(loginFailure());
+    })
   };
 }

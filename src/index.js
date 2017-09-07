@@ -24,24 +24,6 @@ const AuthRoute = ({ component: Component, ...rest }) => (
   )}/>
 )
 
-// class AuthRoute extends React.Component {
-//   render() {
-//     const { component: Component, ...rest } = this.props
-//     return(
-//       <Route {...rest} render={props => (
-//         sessionStorage.getItem('jwt') ? (
-//           <Component {...props}/>
-//         ) : (
-//           <Redirect to={{
-//             pathname: '/login',
-//             state: { from: props.location }
-//           }}/>
-//         )
-//       )}/>
-//     );
-//   }
-// }
-
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
