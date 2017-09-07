@@ -1,0 +1,61 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { createStore, applyMiddleware } from 'redux';
+import reduxThunk from 'redux-thunk';
+import reducers from './reducers';
+
+import App from './components/app';
+import Private from './components/private'
+import LoginPage from './containers/loginPage';
+
+const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
+
+const PRIVATE_ROOT = '/';
+const PUBLIC_ROOT = '/login';
+
+const AuthRoute = ({component, ...props}) => {
+  const { isPrivate } = component;
+  console.log("Component prop: ", ...props);
+  console.log("isPrivate: ", isPrivate);
+  if (sessionStorage.getItem('jwt')) {
+    //User is Authenticated
+    console.log("I am authenticated");
+    if (isPrivate === true) {
+      //If the route is private the user may proceed.
+      console.log("Route is private...user may proceed");
+      return <Route exact { ...props } component={ component } />;
+    }
+    else {
+      //If the route is public, the user is redirected to the app's private root.
+      console.log("Route is public...redirecting to private (/) route")
+      return <Redirect to={ PRIVATE_ROOT } />;
+    }
+  }
+  else {
+    //User is not Authenticated
+    if (isPrivate === true) {
+      //If the route is private the user is redirected to the app's public root.
+      console.log("I am NOT authenticated..redirect to login screen");
+      return <Redirect to={ PUBLIC_ROOT } />;
+    }
+    else {
+      //If the route is public, the user may proceed.
+      console.log("I am not authenticated but route is public so proceed..");
+      return <Route exact { ...props } component={ component } />;
+    }
+  }
+};
+
+ReactDOM.render(
+  <Provider store={createStoreWithMiddleware(reducers)}>
+    <BrowserRouter>
+      <div>
+          <AuthRoute exact path="/" component={App}  />
+          <AuthRoute path="/login" component={LoginPage} />
+      </div>
+    </BrowserRouter>
+  </Provider>
+  , document.querySelector('.container'));
+

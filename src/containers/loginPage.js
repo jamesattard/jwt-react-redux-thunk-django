@@ -7,8 +7,6 @@ import * as sessionActions from '../actions/sessionActions';
 
 class LogInPage extends React.Component {  
 
-  static isPrivate = false;
-
   constructor(props) {
     super(props);
     this.state = {credentials: {username: '', password: ''}}
@@ -29,7 +27,6 @@ class LogInPage extends React.Component {
   }
 
   render() {
-    console.log("This is mounted!")    
     return (
       <div>
         <form>

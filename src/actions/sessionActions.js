@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as types from './actionTypes';  
-import sessionApi from '../api/sessionApi';
 
 export function loginSuccess() {  
   return {type: types.LOG_IN_SUCCESS}
