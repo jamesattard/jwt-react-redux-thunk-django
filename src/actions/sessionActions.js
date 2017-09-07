@@ -1,19 +1,34 @@
 import axios from 'axios';
 import * as types from './actionTypes';
-import sessionApi from '../api/sessionApi';
+import SessionApi from '../api/sessionApi';
 
 export function loginSuccess() {  
   return {type: types.LOG_IN_SUCCESS}
 }
 
+// export function logInUser(credentials, callback) {  
+//   return function(dispatch) {
+
+//     axios.post('http://localhost:7777/auth/', {
+//       username: credentials.username,
+//       password: credentials.password
+//     })
+//     .then(function (response) {
+//       sessionStorage.setItem('jwt', response.data.token);
+//       dispatch(loginSuccess());
+//     })
+//     .then(() => callback())
+//     .catch(function (error) {
+//       callback();
+//       // throw(error);
+//       // dispatch(loginFailure());
+//     })
+//   };
+// }
+
 export function logInUser(credentials, callback) {  
   return function(dispatch) {
-
-    axios.post('http://localhost:7777/auth/', {
-      username: credentials.username,
-      password: credentials.password
-    })
-    .then(function (response) {
+    return SessionApi.login(credentials).then(response => {
       sessionStorage.setItem('jwt', response.data.token);
       dispatch(loginSuccess());
     })
@@ -25,14 +40,3 @@ export function logInUser(credentials, callback) {
     })
   };
 }
-
-// export function logInUser(credentials) {  
-//   return function(dispatch) {
-//     return sessionApi.login(credentials).then(response => {
-//       sessionStorage.setItem('jwt', response.jwt);
-//       dispatch(loginSuccess());
-//     }).catch(error => {
-//       throw(error);
-//     });
-//   };
-// }
