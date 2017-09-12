@@ -3,7 +3,7 @@ import session from './sessionReducer';
 
 const rootReducer = combineReducers({
   products: (state = [], action) => action.payload || state,
-  session
+  logged_in: session
 });
 
 export default rootReducer;

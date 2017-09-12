@@ -8,6 +8,7 @@ import reducers from './reducers';
 
 import App from './components/app';
 import LoginPage from './containers/loginPage';
+import Header from './containers/header';
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 
@@ -41,6 +42,7 @@ ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
         <div>
+          <Header />
           <Switch>
             <AuthRoute exact path="/" component={App}  />
             <LoginRoute path="/login" component={LoginPage} />
